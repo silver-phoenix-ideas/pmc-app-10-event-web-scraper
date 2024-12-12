@@ -10,5 +10,10 @@ headers = {
 
 source = scraper_utils.scrape(url)
 value = scraper_utils.extract(source)
+content = scraper_utils.read()
 
 print(value)
+
+if value != "No upcoming tours":
+    if value not in content:
+        scraper_utils.store(value)
