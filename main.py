@@ -1,5 +1,4 @@
 import dotenv
-import smtplib
 import modules.scraper_utils as scraper_utils
 import modules.email_utils as email_utils
 
@@ -22,22 +21,6 @@ print(value)
 if value != "No upcoming tours":
     if value not in content:
         scraper_utils.store(value)
-
-        try:
-            email_utils.send_email(value)
-            print("Email sent successfully.")
-
-        except smtplib.SMTPResponseException as e:
-            print("Email could not be sent.")
-
-            match e.smtp_code:
-                case 334:
-                    print("Authentication credentials missing.")
-                case 535:
-                    print("Authentication credentials invalid.")
-
-        except smtplib.SMTPRecipientsRefused as e:
-            print("Email could not be sent.")
-            print("Recipient address invalid.")
+        email_utils.send_email(value)
     else:
         print("Email for this event already sent.")

@@ -28,6 +28,22 @@ def send_email(message: str) -> None:
 
     email_message = prepare_email(sender, recipient, message)
 
-    with smtplib.SMTP_SSL(host, port, context=context) as server:
-        server.login(username, password)
-        server.sendmail(sender, recipient, email_message)
+    try:
+        with smtplib.SMTP_SSL(host, port, context=context) as server:
+            server.login(username, password)
+            server.sendmail(sender, recipient, email_message)
+
+        print("Email sent successfully.")
+
+    except smtplib.SMTPResponseException as e:
+        print("Email could not be sent.")
+
+        match e.smtp_code:
+            case 334:
+                print("Authentication credentials missing.")
+            case 535:
+                print("Authentication credentials invalid.")
+
+    except smtplib.SMTPRecipientsRefused as e:
+        print("Email could not be sent.")
+        print("Recipient address invalid.")
