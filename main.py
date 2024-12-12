@@ -1,3 +1,4 @@
+import time
 import dotenv
 import modules.scraper_utils as scraper_utils
 import modules.email_utils as email_utils
@@ -12,15 +13,19 @@ headers = {
                   'Safari/537.36'
 }
 
-source = scraper_utils.scrape(url)
-value = scraper_utils.extract(source)
-content = scraper_utils.read()
+if __name__ == "__main__":
+    while True:
+        source = scraper_utils.scrape(url)
+        value = scraper_utils.extract(source)
+        content = scraper_utils.read()
 
-print(value)
+        print(value)
 
-if value != "No upcoming tours":
-    if value not in content:
-        scraper_utils.store(value)
-        email_utils.send_email(value)
-    else:
-        print("Email for this event already sent.")
+        if value != "No upcoming tours":
+            if value not in content:
+                scraper_utils.store(value)
+                email_utils.send_email(value)
+            else:
+                print("Email for this event already sent.")
+
+        time.sleep(5)
