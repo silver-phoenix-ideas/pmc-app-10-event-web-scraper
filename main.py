@@ -17,13 +17,13 @@ if __name__ == "__main__":
     while True:
         source = scraper_utils.scrape(url)
         value = scraper_utils.extract(source)
-        content = scraper_utils.read()
-
         print(value)
 
         if value != "No upcoming tours":
-            if value not in content:
-                scraper_utils.store(value)
+            already_parsed = scraper_utils.check_csv(value)
+
+            if not already_parsed:
+                scraper_utils.store_csv(value)
                 email_utils.send_email(value)
             else:
                 print("Email for this event already sent.")

@@ -24,15 +24,19 @@ def init_csv() -> None:
             file.write(",".join(config.DATA_FORMAT) + "\n")
 
 
-def read() -> str:
+def check_csv(value: str) -> bool:
     init_csv()
 
     with open(config.DATA_FILE) as file:
         content = file.read()
 
-    return content
+    already_parsed = value in content
+
+    return already_parsed
 
 
-def store(value: str) -> None:
+def store_csv(value: str) -> None:
+    init_csv()
+
     with open(config.DATA_FILE, "a") as file:
         file.write(value + "\n")
