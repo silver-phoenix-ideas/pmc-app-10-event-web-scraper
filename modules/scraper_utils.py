@@ -1,6 +1,7 @@
 import os
 import requests
 import selectorlib
+import modules.config as config
 
 
 def scrape(url: str) -> str:
@@ -17,19 +18,21 @@ def extract(source: str) -> str:
     return value
 
 
-def read() -> str:
-    content = ""
+def init_csv() -> None:
+    if not os.path.exists(config.DATA_FILE):
+        with open(config.DATA_FILE, "w") as file:
+            file.write(",".join(config.DATA_FORMAT) + "\n")
 
-    if os.path.exists("data.txt"):
-        with open("data.txt") as file:
-            content = file.read()
-    else:
-        with open("data.txt", "w") as file:
-            pass
+
+def read() -> str:
+    init_csv()
+
+    with open(config.DATA_FILE) as file:
+        content = file.read()
 
     return content
 
 
 def store(value: str) -> None:
-    with open("data.txt", "a") as file:
+    with open(config.DATA_FILE, "a") as file:
         file.write(value + "\n")
