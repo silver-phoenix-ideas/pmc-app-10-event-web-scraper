@@ -16,16 +16,18 @@ headers = {
 if __name__ == "__main__":
     while True:
         source = scraper_utils.scrape(url)
-        value = scraper_utils.extract(source)
-        print(value)
+        data = scraper_utils.extract(source)
 
-        if value != "No upcoming tours":
-            already_parsed = scraper_utils.check_csv(value)
+        if data:
+            print(data)
+            already_parsed = scraper_utils.check_csv(data)
 
             if not already_parsed:
-                scraper_utils.store_csv(value)
-                email_utils.send_email(value)
+                scraper_utils.store_csv(data)
+                email_utils.send_email(" - ".join(data.values()))
             else:
                 print("Email for this event already sent.")
+        else:
+            print("No upcoming events.")
 
         time.sleep(5)
